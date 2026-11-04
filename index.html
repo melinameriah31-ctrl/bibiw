@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>Are You Mad At Me? 🥺❤️</title>
+<style>
+  /* ============================================================
+     GLOBAL / RESET
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink:   #ff4fa3;
+    --hot:    #ff1f7a;
+    --purple: #a855f7;
+    --lav:    #d8b4fe;
+    --blue:   #7dd3fc;
+    --turq:   #2dd4bf;
+    --orange: #fb923c;
+    --yellow: #fde047;
+    --coral:  #ff7f6e;
+    --ink:    #3b0764;
+    --card:   rgba(255,255,255,.82);
+  }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Nunito', 'Segoe UI', 'Trebuchet MS', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(135deg, #ffe0f0 0%, #e9d5ff 25%, #dbeafe 50%, #ccfbf1 75%, #fef9c3 100%);
+    background-size: 400% 400%;
+    animation: bgShift 18s ease infinite;
+    min-height: 100vh;
+    min-height: 100dvh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  @keyframes bgShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  html[dir="rtl"] body {
+    font-family: 'Tahoma', 'Segoe UI', 'Nunito', sans-serif;
+  }
+
+  /* ============================================================
+     DECORATIVE LAYER
+     ============================================================ */
+  #decor {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .float-heart {
+    position: absolute;
+    font-size: 22px;
+    animation: floatUp linear infinite;
+    opacity: .8;
+    will-change: transform;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(110vh) scale(.6) rotate(0deg); opacity: 0; }
+    10%  { opacity: .9; }
+    90%  { opacity: .9; }
+    100% { transform: translateY(-15vh) scale(1.1) rotate(360deg); opacity: 0; }
+  }
+
+  .sparkle {
+    position: absolute;
+    font-size: 14px;
+    animation: twinkle 2.4s ease-in-out infinite;
+    will-change: opacity, transform;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: .15; transform: scale(.6); }
+    50%      { opacity: 1;   transform: scale(1.15); }
+  }
+
+  .cloud {
+    position: absolute;
+    font-size: 42px;
+    opacity: .55;
+    animation: drift 26s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes drift {
+    from { transform: translateX(-20vw); }
+    to   { transform: translateX(120vw); }
+  }
+
+  #cursorHeart {
+    position: fixed;
+    font-size: 20px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform .08s linear;
+    display: none;
+  }
+
+  /* ============================================================
+     TOP BAR
+     ============================================================ */
+  #topBar {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 50;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: calc(100vw - 24px);
+  }
+
+  html[dir="rtl"] #topBar {
+    right: auto;
+    left: 12px;
+    justify-content: flex-start;
+  }
+
+  .lang-wrap {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,.6);
+    padding: 4px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 14px rgba(168,85,247,.25);
+  }
+
+  .lang-btn {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    cursor: pointer;
+    line-height: 1;
+    transition: background .2s, transform .2s;
+  }
+
+  .lang-btn:hover { background: rgba(255,255,255,.8); transform: scale(1.1); }
+  .lang-btn.active {
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    box-shadow: 0 2px 10px rgba(255,31,122,.45);
+  }
+
+  #soundBtn {
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    background: rgba(255,255,255,.7);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 14px rgba(168,85,247,.25);
+    transition: transform .2s, background .2s;
+  }
+  #soundBtn:hover { transform: scale(1.1) rotate(8deg); background: #fff; }
+
+  /* ============================================================
+     SCREENS
+     ============================================================ */
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 640px;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    animation: screenIn .45s cubic-bezier(.2,.9,.3,1.2) both;
+  }
+  .screen.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes screenIn {
+    from { opacity: 0; transform: translateY(24px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ---- Welcome card ---- */
+  .card {
+    background: var(--card);
+    border-radius: 32px;
+    padding: 30px 22px 34px;
+    width: 100%;
+    box-shadow:
+      0 20px 50px rgba(168,85,247,.30),
+      0 0 0 4px rgba(255,255,255,.55) inset;
+    backdrop-filter: blur(10px);
+    position: relative;
+  }
+
+  .big-heart {
+    font-size: 70px;
+    line-height: 1;
+    display: inline-block;
+    animation: heartBeat 1.3s ease-in-out infinite;
+    filter: drop-shadow(0 6px 14px rgba(255,31,122,.45));
+  }
+
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    15%      { transform: scale(1.18); }
+    30%      { transform: scale(.96); }
+    45%      { transform: scale(1.12); }
+    60%      { transform: scale(1); }
+  }
+
+  h1 {
+    font-size: clamp(26px, 7vw, 44px);
+    font-weight: 900;
+    margin: 12px 0 4px;
+    background: linear-gradient(90deg, var(--hot), var(--purple), var(--turq), var(--orange), var(--hot));
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientText 5s linear infinite;
+    letter-spacing: .5px;
+  }
+
+  @keyframes gradientText {
+    to { background-position: 300% 0; }
+  }
+
+  h2.question {
+    font-size: clamp(20px, 5.5vw, 30px);
+    font-weight: 800;
+    color: var(--ink);
+    margin: 6px 0 26px;
+  }
+
+  /* ---- Buttons ---- */
+  .btn-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 900;
+    font-size: clamp(18px, 4.5vw, 24px);
+    padding: 16px 42px;
+    border-radius: 999px;
+    color: #fff;
+    letter-spacing: .5px;
+    position: relative;
+    transition: transform .18s cubic-bezier(.2,.9,.3,1.4), box-shadow .18s;
+    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+    touch-action: manipulation;
+  }
+
+  #yesBtn {
+    background: linear-gradient(135deg, #ff6b9d, #ff1f7a, #a855f7);
+    box-shadow: 0 8px 24px rgba(255,31,122,.45);
+  }
+  #yesBtn:hover { transform: scale(1.07); }
+
+  #noBtn {
+    background: linear-gradient(135deg, #2dd4bf, #38bdf8, #a78bfa);
+    box-shadow: 0 8px 24px rgba(45,212,191,.45);
+  }
+  #noBtn:hover { transform: scale(1.07) rotate(-2deg); }
+
+  .btn:active { transform: scale(.95); }
+
+  /* ============================================================
+     SURPRISE SCREENS
+     ============================================================ */
+  .surprise-card {
+    background: var(--card);
+    border-radius: 32px;
+    padding: 26px 20px 30px;
+    width: 100%;
+    box-shadow:
+      0 22px 55px rgba(168,85,247,.35),
+      0 0 0 4px rgba(255,255,255,.6) inset;
+    backdrop-filter: blur(10px);
+  }
+
+  .surprise-title {
+    font-size: clamp(26px, 7vw, 42px);
+    font-weight: 900;
+    margin-bottom: 6px;
+    background: linear-gradient(90deg, var(--orange), var(--hot), var(--purple), var(--turq), var(--orange));
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientText 4s linear infinite;
+  }
+
+  .surprise-sub {
+    font-size: clamp(16px, 4.2vw, 22px);
+    font-weight: 800;
+    color: var(--purple);
+    margin-bottom: 18px;
+  }
+
+  .img-frame {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 16px;
+    border-radius: 26px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffe0f0, #e9d5ff, #ccfbf1);
+    padding: 8px;
+    box-shadow: 0 14px 36px rgba(168,85,247,.35);
+    position: relative;
+  }
+
+  .img-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 20px;
+    object-fit: contain;
+  }
+
+  .img-fallback {
+    display: none;
+    padding: 40px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--purple);
+    text-align: center;
+    background: repeating-linear-gradient(45deg, #fdf2ff, #fdf2ff 12px, #f3e8ff 12px, #f3e8ff 24px);
+    border-radius: 20px;
+    line-height: 1.5;
+  }
+
+  .caption {
+    font-size: clamp(15px, 4vw, 19px);
+    font-weight: 800;
+    color: var(--ink);
+    margin: 6px 0 18px;
+    padding: 0 6px;
+  }
+
+  .emoji-row {
+    font-size: clamp(22px, 6vw, 32px);
+    letter-spacing: 6px;
+    margin: 10px 0 4px;
+    animation: bob 1.6s ease-in-out infinite;
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  #yesPlayAgain,
+  #noPlayAgain {
+    margin-top: 8px;
+    background: linear-gradient(135deg, var(--yellow), var(--orange), var(--coral));
+    color: #5b21b6;
+    font-size: clamp(16px, 4.2vw, 21px);
+    padding: 14px 34px;
+    box-shadow: 0 8px 24px rgba(251,146,60,.5);
+  }
+  #yesPlayAgain:hover,
+  #noPlayAgain:hover { transform: scale(1.07) rotate(2deg); }
+
+  /* ============================================================
+     CONFETTI
+     ============================================================ */
+  #confettiLayer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    overflow: hidden;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 14px;
+    border-radius: 2px;
+    will-change: transform, opacity;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0%   { transform: translateY(-40px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: .9; }
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer {
+    position: relative;
+    z-index: 2;
+    margin-top: 22px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #7c3aed;
+    opacity: .85;
+    text-align: center;
+    padding-bottom: 8px;
+  }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 480px) {
+    .card, .surprise-card { padding: 22px 14px 26px; border-radius: 26px; }
+    .btn { padding: 14px 30px; }
+    .btn-row { gap: 12px; }
+    .img-frame { max-width: 100%; }
+  }
+
+  /* ============================================================
+     REDUCED MOTION
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+    .float-heart, .sparkle, .cloud, #cursorHeart { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Decorative layer ===== -->
+<div id="decor" aria-hidden="true"></div>
+<div id="cursorHeart" aria-hidden="true">❤️</div>
+<div id="confettiLayer" aria-hidden="true"></div>
+
+<!-- ===== Top bar ===== -->
+<div id="topBar">
+  <div class="lang-wrap" role="group" aria-label="Language selector">
+    <button class="lang-btn active" data-lang="en" aria-label="English">🇬🇧</button>
+    <button class="lang-btn" data-lang="fr" aria-label="Français">🇫🇷</button>
+    <button class="lang-btn" data-lang="ar" aria-label="العربية">🇩🇿</button>
+  </div>
+  <button id="soundBtn" aria-label="Toggle sound" aria-pressed="false">🔇</button>
+</div>
+
+<!-- ============================================================
+     SCREEN 1 — WELCOME
+     ============================================================ -->
+<section id="screenWelcome" class="screen active" aria-labelledby="welcomeTitle">
+  <div class="card">
+    <div class="big-heart" aria-hidden="true">❤️</div>
+    <h1 id="welcomeTitle" data-i18n="hey">HEY YOUUU! 🥺❤️</h1>
+    <h2 class="question" data-i18n="question">Are you mad at me?</h2>
+
+    <div class="btn-row">
+      <button id="yesBtn" class="btn" data-i18n="yes" aria-label="Yes, I am mad">YES 😒</button>
+      <button id="noBtn" class="btn" data-i18n="no" aria-label="No, I am not mad">NO 😇</button>
+    </div>
+
+    <p id="funnyMsg" class="funny-msg" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCREEN 2 — YES SURPRISE
+     ============================================================ -->
+<section id="screenYes" class="screen" aria-labelledby="yesTitle">
+  <div class="surprise-card">
+    <div class="emoji-row" aria-hidden="true">😂🤣😹😂</div>
+    <h1 id="yesTitle" class="surprise-title" data-i18n="yesTitle">AHA! I KNEW IT! 😂</h1>
+
+    <div class="img-frame">
+      <!-- ============================================================
+           YES SURPRISE IMAGE
+           File: yes-surprise.jpg (repo root, same folder as index.html)
+           ============================================================ -->
+      <img
+        id="yesImage"
+        src="./yes-surprise.jpg"
+        alt="Yes surprise image"
+        loading="eager"
+        decoding="async"
+      />
+      <div class="img-fallback" id="yesFallback">
+        📸 Image not found.<br />
+        Expected at <strong>./yes-surprise.jpg</strong> (repo root)
+      </div>
+    </div>
+
+    <p class="caption" data-i18n="yesCaption">Too slow! You can’t escape the truth! ❤️</p>
+    <div class="emoji-row" aria-hidden="true">💖✨💖✨</div>
+
+    <button id="yesPlayAgain" class="btn" data-i18n="playAgain" aria-label="Play again">PLAY AGAIN? 🔄</button>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCREEN 3 — NO SURPRISE
+     ============================================================ -->
+<section id="screenNo" class="screen" aria-labelledby="noTitle">
+  <div class="surprise-card">
+    <div class="emoji-row" aria-hidden="true">🥰😘💕🥰</div>
+    <h1 id="noTitle" class="surprise-title" data-i18n="noTitle">GOOD BOY! ❤️</h1>
+    <p class="surprise-sub" data-i18n="noSub">That’s my favorite answer! 😘</p>
+
+    <div class="img-frame">
+      <!-- ============================================================
+           NO SURPRISE IMAGE
+           File: no-surprise.jpg (repo root, same folder as index.html)
+           ============================================================ -->
+      <img
+        id="noImage"
+        src="./no-surprise.jpg"
+        alt="No surprise image"
+        loading="eager"
+        decoding="async"
+      />
+      <div class="img-fallback" id="noFallback">
+        📸 Image not found.<br />
+        Expected at <strong>./no-surprise.jpg</strong> (repo root)
+      </div>
+    </div>
+
+    <p class="caption" data-i18n="noCaption">Good boy! You passed the test ❤️</p>
+    <div class="emoji-row" aria-hidden="true">⭐💫⭐💫</div>
+
+    <button id="noPlayAgain" class="btn" data-i18n="playAgain" aria-label="Play again">PLAY AGAIN? 🔄</button>
+  </div>
+</section>
+
+<footer data-i18n="footer">Made with love, just for you ❤️</footer>
+
+<script>
+/* ================================================================
+   TRANSLATIONS
+   ================================================================ */
+const I18N = {
+  en: {
+    hey: "HEY YOUUU! 🥺❤️",
+    question: "Are you mad at me?",
+    yes: "YES 😒",
+    no: "NO 😇",
+    yesTitle: "AHA! I KNEW IT! 😂",
+    yesCaption: "Too slow! You can’t escape the truth! ❤️",
+    noTitle: "GOOD BOY! ❤️",
+    noSub: "That’s my favorite answer! 😘",
+    noCaption: "Good boy! You passed the test ❤️",
+    playAgain: "PLAY AGAIN? 🔄",
+    footer: "Made with love, just for you ❤️",
+    funny: [
+      "Are you sure? 👀",
+      "No no no! 😂",
+      "Too slow!",
+      "You can’t escape me!",
+      "Try harder! 😭",
+      "Catch me if you can!"
+    ],
+    yesAlt: "Yes surprise image",
+    noAlt: "No surprise image"
+  },
+  fr: {
+    hey: "COUCOU TOI ! 🥺❤️",
+    question: "Tu es fâché contre moi ?",
+    yes: "OUI 😒",
+    no: "NON 😇",
+    yesTitle: "AHA ! JE LE SAVAIS ! 😂",
+    yesCaption: "Trop lent ! Tu ne peux pas échapper à la vérité ! ❤️",
+    noTitle: "BON GARÇON ! ❤️",
+    noSub: "C’est ma réponse préférée ! 😘",
+    noCaption: "Bon garçon ! Tu as réussi le test ❤️",
+    playAgain: "REJOUER ? 🔄",
+    footer: "Fait avec amour, juste pour toi ❤️",
+    funny: [
+      "Tu es sûr ? 👀",
+      "Non non non ! 😂",
+      "Trop lent !",
+      "Tu ne peux pas m’échapper !",
+      "Essaie encore ! 😭",
+      "Attrape-moi si tu peux !"
+    ],
+    yesAlt: "Image surprise oui",
+    noAlt: "Image surprise non"
+  },
+  ar: {
+    hey: "أهلاً بك ! 🥺❤️",
+    question: "هل أنت غاضب مني؟",
+    yes: "نعم 😒",
+    no: "لا 😇",
+    yesTitle: "آها ! كنت أعلم ! 😂",
+    yesCaption: "بطيء جداً ! لا يمكنك الهروب من الحقيقة ! ❤️",
+    noTitle: "ولد جيد ! ❤️",
+    noSub: "هذا جوابي المفضل ! 😘",
+    noCaption: "ولد جيد ! لقد نجحت في الاختبار ❤️",
+    playAgain: "العب مجدداً ؟ 🔄",
+    footer: "صنع بحب ، فقط من أجلك ❤️",
+    funny: [
+      "هل أنت متأكد؟ 👀",
+      "لا لا لا ! 😂",
+      "بطيء جداً !",
+      "لا يمكنك الهروب مني !",
+      "حاول أكثر ! 😭",
+      "أمسك بي إن استطعت !"
+    ],
+    yesAlt: "صورة مفاجأة نعم",
+    noAlt: "صورة مفاجأة لا"
+  }
+};
+
+let currentLang = "en";
+
+/* ================================================================
+   DOM REFERENCES
+   ================================================================ */
+const $ = (s) => document.querySelector(s);
+const welcomeScreen = $("#screenWelcome");
+const yesScreen = $("#screenYes");
+const noScreen = $("#screenNo");
+const yesBtn = $("#yesBtn");
+const noBtn = $("#noBtn");
+const funnyMsg = $("#funnyMsg");
+const soundBtn = $("#soundBtn");
+const decor = $("#decor");
+const cursorHeart = $("#cursorHeart");
+const confettiLayer = $("#confettiLayer");
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let soundEnabled = false;
+let audioCtx = null;
+let reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener?.("change", (e) => {
+  reducedMotion = e.matches;
+});
+
+/* ================================================================
+   LANGUAGE
+   ================================================================ */
+function applyLanguage(lang) {
+  currentLang = lang;
+  const dict = I18N[lang];
+
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key]) el.textContent = dict[key];
+  });
+
+  $("#yesImage").alt = dict.yesAlt;
+  $("#noImage").alt = dict.noAlt;
+
+  document.querySelectorAll(".lang-btn").forEach((b) => {
+    b.classList.toggle("active", b.dataset.lang === lang);
+  });
+}
+
+document.querySelectorAll(".lang-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    applyLanguage(btn.dataset.lang);
+    playTone(660, 0.05);
+  });
+});
+
+/* ================================================================
+   SOUND (WebAudio — gesture-only, never autoplay)
+   ================================================================ */
+function ensureAudio() {
+  if (!audioCtx) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (AC) audioCtx = new AC();
+  }
+  if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+}
+
+function playTone(freq = 440, dur = 0.08, type = "sine", gainVal = 0.06) {
+  if (!soundEnabled) return;
+  ensureAudio();
+  if (!audioCtx) return;
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + dur);
+  } catch (_) { /* ignore */ }
+}
+
+soundBtn.addEventListener("click", () => {
+  soundEnabled = !soundEnabled;
+  soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+  soundBtn.setAttribute("aria-pressed", String(soundEnabled));
+  if (soundEnabled) playTone(880, 0.1);
+});
+
+/* ================================================================
+   DECOR
+   ================================================================ */
+const HEART_CHARS = ["❤️", "💖", "💕", "💗", "💓", "🩷", "💜"];
+const SPARK_CHARS = ["✨", "⭐", "🌟", "💫"];
+const CLOUD_CHARS = ["☁️", "☁️", "🌤️"];
+
+function createDecor() {
+  if (reducedMotion) return;
+  decor.innerHTML = "";
+
+  const heartCount = window.innerWidth < 600 ? 8 : 14;
+  for (let i = 0; i < heartCount; i++) {
+    const el = document.createElement("span");
+    el.className = "float-heart";
+    el.textContent = HEART_CHARS[Math.floor(Math.random() * HEART_CHARS.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = (14 + Math.random() * 22) + "px";
+    el.style.animationDuration = (10 + Math.random() * 12) + "s";
+    el.style.animationDelay = (-Math.random() * 20) + "s";
+    decor.appendChild(el);
+  }
+
+  const sparkCount = window.innerWidth < 600 ? 10 : 18;
+  for (let i = 0; i < sparkCount; i++) {
+    const el = document.createElement("span");
+    el.className = "sparkle";
+    el.textContent = SPARK_CHARS[Math.floor(Math.random() * SPARK_CHARS.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.top = Math.random() * 100 + "vh";
+    el.style.animationDelay = (Math.random() * 3) + "s";
+    el.style.fontSize = (10 + Math.random() * 12) + "px";
+    decor.appendChild(el);
+  }
+
+  const cloudCount = window.innerWidth < 600 ? 2 : 4;
+  for (let i = 0; i < cloudCount; i++) {
+    const el = document.createElement("span");
+    el.className = "cloud";
+    el.textContent = CLOUD_CHARS[Math.floor(Math.random() * CLOUD_CHARS.length)];
+    el.style.top = (5 + Math.random() * 45) + "vh";
+    el.style.animationDuration = (22 + Math.random() * 18) + "s";
+    el.style.animationDelay = (-Math.random() * 20) + "s";
+    decor.appendChild(el);
+  }
+}
+
+/* ================================================================
+   CURSOR HEART (desktop)
+   ================================================================ */
+if (window.matchMedia("(hover: hover) and (pointer: fine)").matches && !reducedMotion) {
+  cursorHeart.style.display = "block";
+  document.addEventListener("mousemove", (e) => {
+    cursorHeart.style.left = e.clientX + "px";
+    cursorHeart.style.top = e.clientY + "px";
+  }, { passive: true });
+  document.addEventListener("mouseleave", () => { cursorHeart.style.opacity = "0"; });
+  document.addEventListener("mouseenter", () => { cursorHeart.style.opacity = "1"; });
+}
+
+/* ================================================================
+   CONFETTI
+   ================================================================ */
+const CONFETTI_COLORS = ["#ff1f7a", "#a855f7", "#2dd4bf", "#fb923c", "#fde047", "#38bdf8", "#ff7f6e"];
+
+function burstConfetti(count = 90) {
+  if (reducedMotion) return;
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement("i");
+    p.className = "confetti-piece";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    p.style.width = (6 + Math.random() * 8) + "px";
+    p.style.height = (10 + Math.random() * 10) + "px";
+    p.style.animationDuration = (2 + Math.random() * 2.2) + "s";
+    p.style.animationDelay = (Math.random() * 0.6) + "s";
+    p.style.opacity = String(0.7 + Math.random() * 0.3);
+    frag.appendChild(p);
+    setTimeout(() => p.remove(), 5200);
+  }
+  confettiLayer.appendChild(frag);
+}
+
+/* ================================================================
+   SCREEN MANAGEMENT
+   ================================================================ */
+function showScreen(screen) {
+  [welcomeScreen, yesScreen, noScreen].forEach((s) => s.classList.remove("active"));
+  screen.classList.add("active");
+  window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+}
+
+/* ================================================================
+   YES BUTTON — normal click, no escape
+   ================================================================ */
+yesBtn.addEventListener("click", () => {
+  burstConfetti(100);
+  playTone(880, 0.12, "triangle");
+  showScreen(yesScreen);
+});
+
+/* ================================================================
+   NO BUTTON
+   ================================================================ */
+noBtn.addEventListener("click", () => {
+  burstConfetti(130);
+  playTone(990, 0.15, "sine");
+  showScreen(noScreen);
+});
+
+/* ================================================================
+   PLAY AGAIN
+   ================================================================ */
+function resetGame() {
+  showScreen(welcomeScreen);
+  applyLanguage(currentLang);
+}
+
+$("#yesPlayAgain").addEventListener("click", resetGame);
+$("#noPlayAgain").addEventListener("click", resetGame);
+
+/* ================================================================
+   IMAGE FALLBACK
+   Only triggers if the uploaded file is missing.
+   ================================================================ */
+function setupImageFallback(imgEl, fallbackEl) {
+  const showFallback = () => {
+    imgEl.style.display = "none";
+    fallbackEl.style.display = "block";
+  };
+  if (imgEl.complete && imgEl.naturalWidth === 0) {
+    showFallback();
+  } else {
+    imgEl.addEventListener("error", showFallback, { once: true });
+    imgEl.addEventListener("load", () => {
+      imgEl.style.display = "";
+      fallbackEl.style.display = "none";
+    });
+  }
+}
+setupImageFallback($("#yesImage"), $("#yesFallback"));
+setupImageFallback($("#noImage"), $("#noFallback"));
+
+/* ================================================================
+   INIT
+   ================================================================ */
+createDecor();
+applyLanguage("en");
+</script>
+</body>
+</html>
